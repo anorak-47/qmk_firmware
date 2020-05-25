@@ -17,6 +17,7 @@
 #include "jellowcake303.h"
 #include "rgb_matrix_types.h"
 #include "command.h"
+#include "common.h"
 
 void suspend_power_down_kb(void) {
     rgb_matrix_set_suspend_state(true);
@@ -52,6 +53,7 @@ bool led_update_kb(led_t led_state) {
 void keyboard_pre_init_kb() {
     palSetLine(LINE_SDB);
     palClearLine(LINE_IICRST);
+    palClearLine(LINE_LED1);
     // Wait 10ms to ensure the device has woken up.
     // wait_ms(10);
     keyboard_pre_init_user();
@@ -59,11 +61,12 @@ void keyboard_pre_init_kb() {
 
 void keyboard_post_init_kb() {
     // Customise these values to desired behavior
-    // debug_enable = true;
+    debug_enable = true;
     // debug_matrix=true;
     // debug_keyboard=true;
     // debug_mouse=true;
 
+    palSetLine(LINE_LED1);
     keyboard_post_init_user();
 }
 
@@ -74,15 +77,7 @@ bool command_extra(uint8_t code) {
     switch (code) {
         case MAGIC_KC(MAGIC_KEY_BOOTLOADER):
         case MAGIC_KC(MAGIC_KEY_BOOTLOADER_ALT):
-            oled_set_cursor(0, 0);
-            oled_write("bl\n\n\n\n", true);
-            oled_render();
-            oled_render();
-            oled_render();
-            oled_render();
-            oled_render();
-            oled_render();
-            oled_render();
+            jc_oled_show_bootloader_msg();
             break;
     }
 

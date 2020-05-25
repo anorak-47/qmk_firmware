@@ -1,5 +1,5 @@
 #include "oled.h"
-#include "jellowcake_common.h"
+#include "common.h"
 #ifndef QMK_KEYBOARD_H
 #    include "jellowcake303.h"
 #    include "config.h"
@@ -32,7 +32,7 @@ void oled_jellowcake_render_status(void) {
     oled_write(txtbuf, false);
 
     // RGB Matrix Status
-    sprintf(txtbuf, "RGB [%u] %s %u\n", status_cur.rgb_matrix_enabled ? "an" : "aus", status_cur.rgb_matrix_mode, status_cur.rgb_matrix_speed);
+    sprintf(txtbuf, "RGB [%u] %s %u\n", status_cur.rgb_matrix_mode, status_cur.rgb_matrix_enabled ? "an" : "aus", status_cur.rgb_matrix_speed);
     oled_write(txtbuf, false);
     sprintf(txtbuf, "%s\n", get_effect_name(status_cur.rgb_matrix_mode));
     oled_write(txtbuf, false);
@@ -49,18 +49,20 @@ void oled_task_user(void) {
             oled_show_logo_timeout = timer_read32() + OLED_SHOW_LOGO_TIMEOUT;
             render_jellowcake303_logo();
             bool success = oled_scroll_left();
-            printf("now scrolling: %d\n", success);
+            dprintf("now scrolling: %d\n", success);
         }
 
-        if (timer_expired32(timer_read32(), oled_show_logo_timeout) || status_changed(&status_cur, &status_old)) {
+        if (timer_expired32(timer_read32(), oled_show_logo_timeout) /*|| status_changed(&status_cur, &status_old)*/) {
             oled_scroll_off();
             oled_show_logo = false;
-            printf("logo off\n");
             oled_jellowcake_render_status();
         }
     } else {
         if (status_changed(&status_cur, &status_old)) oled_jellowcake_render_status();
     }
 }
+
+// Runs just one time when the keyboard initializes.
+// void keyboard_post_init_user(void) { render_jellowcake303_logo(); };
 
 #endif

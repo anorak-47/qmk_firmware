@@ -1,10 +1,12 @@
-#include "jellowcake_common.h"
+#include "common.h"
 #ifndef QMK_KEYBOARD_H
 #    include "jellowcake303.h"
 #    include "config.h"
 #else
 #    include QMK_KEYBOARD_H
 #endif
+#include <string.h>
+#include <ctype.h>
 
 // clang-format off
 static const char *layerNames[] = {
@@ -16,56 +18,27 @@ static const char *layerNames[] = {
 
 static const char *rgb_matrix_effect_names[] = {
 		"no animation",
-#define RGB_MATRIX_EFFECT(name, ...) "name",
+#define RGB_MATRIX_EFFECT(name, ...) STR(name),
 #include "rgb_matrix_animations/rgb_matrix_effects.inc"
 #undef RGB_MATRIX_EFFECT
+		NULL
 };
-
-#if 0
-static const char *rgb_matrix_effect_names[] = {
-		//122345678901234567890
-		"no animation"
-		"solid color",
-		"alpha mods",
-		"gradient up down",
-		"gradient left right",
-		"breathing",
-		"colorband sat",
-		"colorband val",
-		"colorband pinwheel sat",
-		"colorband pinwheel val",
-		"colorband spiral sat",
-		"colorband spiral val",
-		"cycle all",
-		"cycle left right",
-		"cycle up down",
-		"rainbow moving chevron",
-		"cycle out in",
-		"cycle out in dual",
-		"cycle pinwheel",
-		"cycle spiral",
-		"dual beacon",
-		"rainbow beacon",
-		"rainbow pinwheels",
-		"raindrops",
-		"jellybean raindrops",
-		"typing heatmap",
-		"digital rain",
-		"solid reactive simple",
-		"solid reactive",
-		"solid reactive wide"
-		"solid reactive cross"
-		"solid reactive nexus"
-		"splash",
-		"solid splash"
-};
-#endif
 
 // clang-format on
 
 const char *get_layer_name(uint8_t layer) { return layerNames[layer]; }
 
-const char *get_effect_name(uint8_t mode) { return rgb_matrix_effect_names[mode]; }
+const char *get_effect_name(uint8_t mode) {
+    static char str[32];
+    strcpy(str, rgb_matrix_effect_names[mode]);
+
+    for (uint8_t i = 0; str[i]; i++) {
+        str[i] = tolower(str[i]);
+        if (str[i] == '_') str[i] = ' ';
+    }
+
+    return str;
+}
 
 void update_status(kbd_status *status) {
     status->rgb_matrix_enabled = rgb_matrix_is_enabled();
@@ -86,3 +59,13 @@ bool status_changed(kbd_status *news, kbd_status *olds) {
 
     return changed;
 }
+
+#ifdef OLED_DRIVER_ENABLE
+
+void jc_oled_show_bootloader_msg() {
+    oled_set_cursor(0, 0);
+    oled_write("bl\n\n\n\n", true);
+    oled_render();
+}
+
+#endif

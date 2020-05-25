@@ -3,7 +3,7 @@
 # jellowcake keyboard driver 
 # MCU is a STM32F303CCT6
 #
-SRC += oled.c jellowcake_common.c
+SRC += oled.c common.c control.c
 #
 # the next two should match the directories in
 #  <chibios>/os/hal/ports/$(MCU_FAMILY)/$(MCU_SERIES)
@@ -54,11 +54,11 @@ BOOTMAGIC_ENABLE = yes          # Virtual DIP switch configuration(+1000)
 MOUSEKEY_ENABLE = no            # Mouse keys(+4700)
 EXTRAKEY_ENABLE = yes           # Audio control and System control(+450)
 CONSOLE_ENABLE = yes            # Console for debug(+400) (use hidlisten)
-CONSOLE_USE_UART_ENABLE = yes   # Enable console debug output to UART Channel 1
+CONSOLE_USE_UART_ENABLE = no    # Enable console debug output to UART Channel 1
 COMMAND_ENABLE = yes            # Commands for debug and configuration
 NKRO_ENABLE = yes               # USB Nkey Rollover
 MIDI_ENABLE = no                # MIDI support (+2400 to 4200, depending on config)
-VIRTSER_ENABLE = no        
+VIRTSER_ENABLE = yes        
 KEYBOARD_SHARED_EP = no
 # Do not enable SLEEP_LED_ENABLE. it uses the same timer as BACKLIGHT_ENABLE
 SLEEP_LED_ENABLE = no           # Breathing sleep LED during USB suspend

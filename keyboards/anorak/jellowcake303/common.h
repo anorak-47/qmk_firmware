@@ -1,5 +1,5 @@
-#ifndef KEYBOARDS_ANORAK_JELLOWCAKE303_JELLOWCAKE_COMMON_H_
-#define KEYBOARDS_ANORAK_JELLOWCAKE303_JELLOWCAKE_COMMON_H_
+#ifndef KEYBOARDS_ANORAK_JELLOWCAKE303_COMMON_H_
+#define KEYBOARDS_ANORAK_JELLOWCAKE303_COMMON_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -17,4 +17,6 @@ bool status_changed(kbd_status *news, kbd_status *olds);
 const char *get_layer_name(uint8_t layer);
 const char *get_effect_name(uint8_t mode);
 
-#endif /* KEYBOARDS_ANORAK_JELLOWCAKE303_JELLOWCAKE_COMMON_H_ */
+void jc_oled_show_bootloader_msg(void);
+
+#endif /* KEYBOARDS_ANORAK_JELLOWCAKE303_COMMON_H_ */
