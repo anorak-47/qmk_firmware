@@ -1,4 +1,4 @@
-/* Copyright 2019 Moritz Wenk
+/* Copyright 2020 Moritz Wenk
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,95 +15,110 @@
  */
 
 #ifndef QMK_KEYBOARD_H
-#include "../../jellowcake303.h"
-#include "../../config.h"
-#include "keycode.h"
-#include <stdbool.h>
-#include <stdint.h>
+#    include "../../jellowcake303.h"
+#    include "../../config.h"
+#    include "keycode.h"
+#    include <stdbool.h>
+#    include <stdint.h>
 #else
-#include QMK_KEYBOARD_H
+#    include QMK_KEYBOARD_H
 #endif
 
-#ifdef SERIAL_OUT_ENABLE
-#include "chprintf.h"
-#endif
+// clang-format off
 
 //
 // Keymap layers
 // Each layer gets a name for readability.
 //
 #define L_TF2 0
-#define L_DEFAULT 1
+#define L_FPS 1
 #define L_MEDIA 2
+#define L_TF2E 3
 
 //
 // Custom keycodes
 //
-enum custom_keycodes {
+enum custom_keycodes
+{
 	KC_DJMP = SAFE_RANGE,
+	KC_RGB0
 };
-
-// clang-format off
 
 #define KC_MO MO
 #define KC_DF DF
 #define KC_TG TG
+#define KC_TO TO
+#define KC_mLT LT
 #define KC_RGB_TOG RGB_TOG
 #define KC_RGB_MOD RGB_MOD
 #define KC_RGB_RMOD RGB_RMOD
 #define KC_RGB_SPI RGB_SPI
 #define KC_RGB_SPD RGB_SPD
+#define KC_RGB_HUI RGB_HUI
+#define KC_RGB_HUD RGB_HUD
+#define KC_RGB_SAI RGB_SAI
+#define KC_RGB_SAD RGB_SAD
+#define KC_RGB_VAI RGB_VAI
+#define KC_RGB_VAD RGB_VAD
 
 const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
- * Default layer (DuckJump)
+ * Duckjump layer for Team Fortress 2
  *
- *    kx0|   kx1| kx2| kx3|    kx4|   kx5| kx6| kx7|
- * ,-----------------------------------------------,
- * | F12 |  Esc | F1 | F2 |    F3 |   F4 |    |    |
- * |-----------------------------------------------|
- * |   T |  Tab |  Q |  W |     E |    R |    |    |
- * |-----------------------------------------------|
- * |   G |    M |  A |  S |     D |    F |    |    |
- * |-----------------------------------------------|
- * |   B |Shift|   Z |  X |     C |    V |  L |  H |
- * |-----------------------------------------------|
- * |     |     |  FN0| FN1|  DJMP |  Ent |  , |  . |
- * `----------------------------------------------'
+ * Left Shift -> quick switch to meele weapon
+ * Slash  "/" -> quick switch to secondary weapon
+ * Ctrl -> Duck
+ * DJMP -> Jump and Duck
+ * Tab  -> show scores
+ * , -> change class
+ * . -> change team
+ *
+ *    kx0|   kx1| kx2|  kx3|    kx4|   kx5| kx6| kx7|
+ * ,----------------------------------------------------,
+ * | F12 |   Esc |   F1 |   F2 |    F3 |   F4 |    |    |
+ * |----------------------------------------------------|
+ * |   T |   Tab |    Q |    W |     E |    R |    |    |
+ * |----------------------------------------------------|
+ * |   G | Shift |    A |    S |     D |    F |    |    |
+ * |----------------------------------------------------|
+ * |   B | LCtrl |    Z |    X |     C |    V |  L |  H |
+ * |----------------------------------------------------|
+ * |     |       | LMED | Ctrl |  DJMP | SLSH |  , |  . |
+ * `----------------------------------------------------'
  *
  */
 [L_TF2] = LAYOUT_JELLOWCAKE303(
-		F12, ESC, F1, F2, F3, F4,
-		T, TAB, Q, W, E, R,
-		G, M, A, S, D, F,
-		B, LSFT, Z, X, C, V, L, H,
-		MO(L_MEDIA), MO(L_MEDIA), DJMP, ENT, COMMA, DOT ),
+		F12,   ESC,     F1,    F2,    F3,    F4,
+		  T,   TAB,      Q,     W,     E,     R,
+		  G,  LSFT,      A,     S,     D,     F,
+		  B, LCTRL,      Z,     X,     C,     V,                  L,    H,
+		       MO(L_MEDIA), LCTRL,  DJMP,  mLT(L_TF2E, KC_SLSH),  COMMA,  DOT ),
 /*
- * Layer (Space)
+ * Generic Egoshooter Layer
  *
- *    kx0|   kx1| kx2| kx3| kx4| kx5|  kx6|  kx7|
- * ,--------------------------------------------,
- * |   5 |  Esc |  1 |  2 |  3 |  4 |     |     |
- * |--------------------------------------------|
- * |   T |  Tab |  Q |  W |  E |  R |     |     |
- * |--------------------------------------------|
- * |   G |    M |  A |  S |  D |  F |     |     |
- * |--------------------------------------------|
- * |   B |Shift|   Z |  X |  C |  V | SPC | ENT |
- * |--------------------------------------------|
- * |     |     |  FN0| FN1| FN2| FN3| SPC | SPC |
- * `--------------------------------------------'
+ *    kx0|   kx1| kx2|  kx3| kx4| kx5|  kx6|  kx7|
+ * ,---------------------------------------------,
+ * |   5 |  Esc |  1 |   2 |  3 |  4 |     |     |
+ * |---------------------------------------------|
+ * |   T |  Tab |  Q |   W |  E |  R |     |     |
+ * |---------------------------------------------|
+ * |   G |    M |  A |   S |  D |  F |     |     |
+ * |---------------------------------------------|
+ * |   B | Shift|  Z |   X |  C |  V | SPC | ENT |
+ * |---------------------------------------------|
+ * |     |      | FN0| Ctrl| FN2| FN3| SPC | SPC |
+ * `---------------------------------------------'
  *
  */
-[L_DEFAULT] = LAYOUT_JELLOWCAKE303(
+[L_FPS] = LAYOUT_JELLOWCAKE303(
 		5, ESC, 1, 2, 3, 4,
 		T, TAB, Q, W, E, R,
-		G, M, A, S, D, F,
-		B, LSFT, Z, X, C, V, L, H,
-		MO(L_MEDIA), MO(L_MEDIA), SPC, ENT, SPC, SPC ),
+		G, LSFT, A, S, D, F,
+		B, LCTRL, Z, X, C, V, L, H,
+		MO(L_MEDIA), LCTRL, SPC, M, COMMA, DOT ),
 
 /*
- *  Meida Layer
+ *  Media Layer
  *
  *    kx0|   kx1| kx2| kx3| kx4| kx5|  kx6|  kx7|
  * ,--------------------------------------------,
@@ -120,111 +135,62 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *
  */
 [L_MEDIA] = LAYOUT_JELLOWCAKE303(
-		MUTE, RGB_TOG, RGB_MOD, RGB_RMOD, TRNS, TG(L_TF2),
-		VOLU, RGB_SPI, TRNS, TRNS, TRNS, TG(L_DEFAULT),
-		VOLD, RGB_SPD, TRNS, TRNS, TRNS, TRNS,
-		MUTE, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS,
-		TRNS, TRNS, TRNS, TRNS, TRNS, TRNS ) };
+		MUTE, RGB_TOG, RGB_RMOD,  RGB_MOD,    RGB0, TO(L_TF2),
+		VOLU, RGB_SPI,  RGB_HUI,  RGB_SAI, RGB_VAI, TO(L_FPS),
+		VOLD, RGB_SPD,  RGB_HUD,  RGB_SAD, RGB_VAD, TRNS,
+		MUTE,    TRNS,     TRNS,     TRNS,    TRNS, TRNS, TRNS, TRNS,
+		                   TRNS,     TRNS,    TRNS, TRNS, TRNS, TRNS ),
+
+/*
+*  TF2 extra keys layer
+*
+*    kx0|   kx1| kx2| kx3| kx4| kx5|  kx6|  kx7|
+* ,--------------------------------------------,
+* |   5 |  Esc |  1 |  2 |  3 |  4 |     |     |
+* |--------------------------------------------|
+* | VOLU|  Tab |  Q |  W |  E |  R |     |     |
+* |--------------------------------------------|
+* | VOLD|    M |  A |  S |  D |  F |     |     |
+* |--------------------------------------------|
+* | MUTE|Shift|   Z |  X |  C |  V | SPC | ENT |
+* |--------------------------------------------|
+* |     |     |  FN0| FN1| FN2| FN3| SPC | SPC |
+* `--------------------------------------------'
+*
+*/
+[L_TF2E] = LAYOUT_JELLOWCAKE303(
+	TRNS, TRNS,    1,    2,    3,    4,
+	TRNS, TRNS, TRNS, TRNS, TRNS, TRNS,
+	TRNS, TRNS, TRNS, TRNS, TRNS, TRNS,
+	TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS, TRNS,
+			    TRNS, TRNS, TRNS, TRNS, TRNS, TRNS )
+
+};
 
 // clang-format on
 
-/*
- void matrix_init_user(void) {
-
- }
-
- void matrix_scan_user(void) {
-
- }
- */
+static void rgb_matrix_set_defaults(void) {
+    rgb_matrix_mode(RGB_MATRIX_STARTUP_MODE);
+    rgb_matrix_enable();
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	switch (keycode) {
-	case KC_DJMP:
-		if (record->event.pressed) {
-			// when keycode DJMP is pressed
-			// do a duck+jump (LCtrl + Space)
-			SEND_STRING(SS_LCTL(" "));
-		} else {
-			// when keycode DJMP is released
-		}
-		break;
-	}
-	return true;
-}
-
-#ifdef OLED_DRIVER_ENABLE
-
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-	return OLED_ROTATION_180;  // flips the display 180 degrees
-}
-
-void oled_jellowcake_render_status(void) {
-	static const char *layerNames[] = { "TeamFortress2", "Default", "Media" };
-	static uint16_t old_layer = 0xffff;
-	static led_t old_led_state = {};
-	static bool old_rgb_matrix_enabled = false;
-	static uint8_t old_rgb_matrix_mode = 255;
-	bool changed = false;
-
-	bool rgb_matrix_enabled = rgb_matrix_is_enabled();
-	uint8_t rgb_matrix_mode = rgb_matrix_get_mode();
-	led_t led_state = host_keyboard_led_state();
-	uint16_t layer = get_highest_layer(layer_state);
-
-	changed = (old_layer != layer) || (old_led_state.raw != led_state.raw)
-			|| (old_rgb_matrix_mode != rgb_matrix_mode)
-			|| (old_rgb_matrix_enabled != rgb_matrix_enabled);
-
-	if (!changed)
-		return;
-
-	old_led_state = led_state;
-	old_layer = layer;
-	old_rgb_matrix_enabled = rgb_matrix_enabled;
-	old_rgb_matrix_mode = rgb_matrix_mode;
-
-	// Host Keyboard Layer Status
-	char txtbuf[32];
-	sprintf(txtbuf, "[%u] %s\n", layer, layerNames[layer]);
-	oled_write_ln(txtbuf, false);
-
-	// RGB Matrix Status
-	sprintf(txtbuf, "RGB %s %u\n", rgb_matrix_enabled ? "on " : "off ", rgb_matrix_mode);
-	oled_write_ln(txtbuf, false);
-
-	// Host Keyboard LED Status
-	oled_write(led_state.num_lock ? "NUM " : "    ", false);
-	oled_write(led_state.caps_lock ? "CAP " : "    ", false);
-	oled_write(led_state.scroll_lock ? "SCR " : "    ", false);
-}
-
-void oled_task_user(void) {
-	oled_jellowcake_render_status();
-}
-
-#endif
-
-void keyboard_post_init_user() {
-#ifdef OLED_DRIVER_ENABLE
-	//render_jellowcake303_logo();
-#endif
-}
-
-/*
- * This function will be called when the state of one of those 5 LEDs changes.
- * It receives the LED state as a struct parameter.
- * By convention, return true from led_update_user() to get the led_update_kb() hook to run its code,
- * and return false when you would prefer not to run the code in led_update_kb().
- */
-bool led_update_user(led_t led_state) {
-
-	print("led_update_kb\n");
-
-	if (led_state.caps_lock)
-		palClearLine(LINE_LED1);
-	else
-		palSetLine(LINE_LED1);
-
-	return false;
+    switch (keycode) {
+        case KC_DJMP:
+            if (record->event.pressed) {
+                // when keycode DJMP is pressed
+                // do a duckjump (Space + LCtrl)
+                SEND_STRING(" " SS_DOWN(X_LCTRL));
+            } else {
+                // when keycode DJMP is released
+                SEND_STRING(SS_UP(X_LCTRL));
+            }
+            break;
+        case KC_RGB0:
+            if (record->event.pressed) {
+                rgb_matrix_set_defaults();
+            }
+            break;
+    }
+    return true;
 }

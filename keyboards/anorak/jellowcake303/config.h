@@ -42,7 +42,7 @@
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
  *
- * Pins available on the jellowcake-303 controller board:
+ * Pins available on the jellowcake303 controller board:
  *
  *   PA0-PA6, PB3-PB5
  *   PB8-PB15
@@ -50,39 +50,35 @@
  *
  *
  */
-//#define MATRIX_ROW_PINS { A4, A3, A2, A1, A0 }
-#define MATRIX_ROW_PINS { A0, A1, A2, A3, A4 }
-#define MATRIX_COL_PINS { B8, B9, B10, B11, B12, B13, B14, B15 }
+#define MATRIX_ROW_PINS \
+    { A0, A1, A2, A3, A4 }
+#define MATRIX_COL_PINS \
+    { B8, B9, B10, B11, B12, B13, B14, B15 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL*/
 #define DIODE_DIRECTION COL2ROW
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
-#define DEBOUNCE 5
+#define DEBOUNCE 3
 
 // RGB matrix lighting with the I2C IS31FL3733 RGB controller
-//
-// This is a 7-bit address, that gets left-shifted and bit 0
-// set to 0 for write, 1 for read (as per I2C protocol)
-// The address will vary depending on your wiring:
-// 0b1110100 AD <-> GND
-// 0b1110111 AD <-> VCC
-// 0b1110101 AD <-> SCL
-// 0b1110110 AD <-> SDA
-//
-#define DRIVER_ADDR_1 0b1110100
-#define DRIVER_ADDR_2 0b1110100 // this is here for compliance reasons.
+#define DRIVER_ADDR_1 0b1010000
+#define DRIVER_ADDR_2 0b1010000  // this is here for compliance reasons.
 
 #define DRIVER_COUNT 2
 #define DRIVER_1_LED_TOTAL 32
 #define DRIVER_LED_TOTAL DRIVER_1_LED_TOTAL
 
-//   #define RGBLIGHT_HUE_STEP 8
-//   #define RGBLIGHT_SAT_STEP 8
-//   #define RGBLIGHT_VAL_STEP 8
-//   #define RGBLIGHT_LIMIT_VAL 255 /* The maximum brightness level */
-//   #define RGBLIGHT_SLEEP
+#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 255                           // limits maximum brightness of LEDs to 200 out of 255. If not defined maximum brightness is set to 255
+#define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_COLOR              // Sets the default mode, if none has been set
+#define RGB_MATRIX_STARTUP_HUE 0                                    // Sets the default hue value, if none has been set
+#define RGB_MATRIX_STARTUP_SAT 255                                  // Sets the default saturation value, if none has been set
+#define RGB_MATRIX_STARTUP_VAL (RGB_MATRIX_MAXIMUM_BRIGHTNESS / 2)  // Sets the default brightness value, if none has been set
+
+#define RGB_MATRIX_KEYPRESSES
+#define RGB_MATRIX_KEYREACTIVE_ENABLED
+#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 
 //#define RGB_MATRIX_KEYPRESSES // reacts to keypresses
 //#define RGB_MATRIX_KEYRELEASES // reacts to keyreleases (instead of keypresses)
@@ -96,6 +92,11 @@
 //#define RGB_MATRIX_STARTUP_SAT 255 // Sets the default saturation value, if none has been set
 //#define RGB_MATRIX_STARTUP_VAL RGB_MATRIX_MAXIMUM_BRIGHTNESS // Sets the default brightness value, if none has been set
 //#define RGB_MATRIX_STARTUP_SPD 127 // Sets the default animation speed, if none has been set
+
+// Basic Configuration OLED Driver
+//#define OLED_SCROLL_TIMEOUT 10    // Scrolls the OLED screen after 0ms of OLED inactivity. Helps reduce OLED Burn-in. Set to 0 to disable.
+//#define OLED_SCROLL_TIMEOUT_RIGHT //	Not defined 	Scroll timeout direction is right when defined, left when undefined.
+#define OLED_SHOW_LOGO_TIMEOUT 5000  // milliseconds
 
 /*
  * Feature disable options
@@ -157,7 +158,10 @@
 
 /* key combination for magic key command */
 /* defined by default; to change, uncomment and set to the combination you want */
-// #define IS_COMMAND() (get_mods() == MOD_MASK_SHIFT)
+/*
+ * new key combination: left shift + left ctrl
+ */
+#define IS_COMMAND() (get_mods() == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_LCTRL)))
 /* control how magic key switches layers */
 //#define MAGIC_KEY_SWITCH_LAYER_WITH_FKEYS  true
 //#define MAGIC_KEY_SWITCH_LAYER_WITH_NKEYS  true
@@ -277,4 +281,3 @@
  #define LCD_E_PIN        1            //< pin  for Enable line
  #endif
  */
-

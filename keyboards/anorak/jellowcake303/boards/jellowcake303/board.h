@@ -30,18 +30,20 @@
  * Board identifier.
  */
 #define BOARD_JELLOWCAKE303
-#define BOARD_NAME                  "jellowcake303"
+#define BOARD_NAME "jellowcake303"
 
 /*
  * Board oscillators-related settings.
  * NOTE: LSE not fitted.
  */
-#define STM32_HSECLK                8000000U
-#define STM32_LSECLK                0U
-#define STM32_LSEDRV                (3U << 3U)
+#define STM32_HSECLK 8000000U
+#define STM32_LSECLK 0U
+#define STM32_LSEDRV (3U << 3U)
 
 //#define STM32_LSE_BYPASS
 //#define STM32_HSE_BYPASS
+
+// clang-format off
 
 /*
  * MCU type as defined in the ST header file stm32f3xx.h.
@@ -190,14 +192,14 @@
     PIN_PUPDR_PULLUP(5) | \
     PIN_PUPDR_PULLUP(6) | \
     PIN_PUPDR_PULLUP(7) | \
-    PIN_PUPDR_PULLUP(8) | \
+    PIN_PUPDR_FLOATING(8) | \
     PIN_PUPDR_FLOATING(9) | \
     PIN_PUPDR_FLOATING(10) | \
     PIN_PUPDR_FLOATING(11) | \
     PIN_PUPDR_FLOATING(12) | \
     PIN_PUPDR_PULLUP(13) | \
     PIN_PUPDR_PULLUP(14) | \
-    PIN_PUPDR_PULLUP(15))
+    PIN_PUPDR_FLOATING(15))
 
 #define VAL_GPIOA_ODR ( \
     PIN_ODR_LOW(0) | \
@@ -1128,6 +1130,7 @@
     PIN_AFIO_AF(14, 0) | \
     PIN_AFIO_AF(15, 0))
 
+// clang-format on
 
 /*
  * The jellowcake 303 boards
@@ -1146,7 +1149,6 @@
  * USB bus de-activation macro, required by the USB driver.
  */
 #define usb_lld_disconnect_bus(usbp) palSetPad(PORT_USB_DISC, PAD_USB_DISC)
-
 
 #if !defined(_FROM_ASM_)
 #    ifdef __cplusplus

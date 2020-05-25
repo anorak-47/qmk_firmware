@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+// clang-format off
+
 #ifndef MCUCONF_H
 #define MCUCONF_H
 

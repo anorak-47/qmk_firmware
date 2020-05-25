@@ -3,6 +3,8 @@
 # jellowcake keyboard driver 
 # MCU is a STM32F303CCT6
 #
+SRC += oled.c jellowcake_common.c
+#
 # the next two should match the directories in
 #  <chibios>/os/hal/ports/$(MCU_FAMILY)/$(MCU_SERIES)
 MCU_FAMILY = STM32
@@ -18,7 +20,7 @@ MCU_STARTUP = stm32f3xx
 #  or <this_dir>/boards
 BOARD = jellowcake303
 # Cortex version
-# STM32L073 is cortex-m0
+# STM32F303 is cortex-m4
 MCU  = cortex-m4
 # ARM version, CORTEX-M0/M1 are 6, CORTEX-M3/M4/M7 are 7
 ARMV = 7
@@ -53,7 +55,7 @@ MOUSEKEY_ENABLE = no            # Mouse keys(+4700)
 EXTRAKEY_ENABLE = yes           # Audio control and System control(+450)
 CONSOLE_ENABLE = yes            # Console for debug(+400) (use hidlisten)
 CONSOLE_USE_UART_ENABLE = yes   # Enable console debug output to UART Channel 1
-COMMAND_ENABLE = no             # Commands for debug and configuration
+COMMAND_ENABLE = yes            # Commands for debug and configuration
 NKRO_ENABLE = yes               # USB Nkey Rollover
 MIDI_ENABLE = no                # MIDI support (+2400 to 4200, depending on config)
 VIRTSER_ENABLE = no        
@@ -63,7 +65,7 @@ SLEEP_LED_ENABLE = no           # Breathing sleep LED during USB suspend
 # if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
 BACKLIGHT_ENABLE = no           # Enable keyboard backlight functionality on B7 by default
 RGBLIGHT_ENABLE = no            # Enable keyboard RGB underglow
-RGB_MATRIX_ENABLE = IS31FL3733
+RGB_MATRIX_ENABLE = IS31FL3733  # Use RGB matrix
 UNICODE_ENABLE = no             # Unicode
 BLUETOOTH_ENABLE = no           # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE = no               # Audio output on port C6
