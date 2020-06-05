@@ -1,4 +1,4 @@
-#ifndef KEYBOARDS_ANORAK_JELLOWCAKE303_CONTROL_H_
-#define KEYBOARDS_ANORAK_JELLOWCAKE303_CONTROL_H_
+#pragma once
+#include <stdint.h>
 
-#endif /* KEYBOARDS_ANORAK_JELLOWCAKE303_CONTROL_H_ */
+void shell_command(uint8_t *buffer, uint8_t length);

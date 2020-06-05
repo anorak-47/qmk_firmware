@@ -1,15 +1,1 @@
-/*
- * oled.h
- *
- *  Created on: 24.05.2020
- *      Author: wenk
- */
-
-#ifndef KEYBOARDS_ANORAK_JELLOWCAKE303_KEYMAPS_DEFAULT_OLED_H_
-#define KEYBOARDS_ANORAK_JELLOWCAKE303_KEYMAPS_DEFAULT_OLED_H_
-
-
-
-
-
-#endif /* KEYBOARDS_ANORAK_JELLOWCAKE303_KEYMAPS_DEFAULT_OLED_H_ */
+#pragma once

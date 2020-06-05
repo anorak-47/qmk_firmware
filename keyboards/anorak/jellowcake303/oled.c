@@ -10,8 +10,6 @@
 #    include QMK_KEYBOARD_H
 #endif
 
-#ifdef OLED_DRIVER_ENABLE
-
 static kbd_status status_old;
 static kbd_status status_cur;
 
@@ -64,5 +62,3 @@ void oled_task_user(void) {
 
 // Runs just one time when the keyboard initializes.
 // void keyboard_post_init_user(void) { render_jellowcake303_logo(); };
-
-#endif

@@ -22,14 +22,13 @@
 void suspend_power_down_kb(void) {
     rgb_matrix_set_suspend_state(true);
     palClearLine(LINE_SDB);
-
+    oled_off();
     suspend_power_down_user();
 }
 
 void suspend_wakeup_init_kb(void) {
     palSetLine(LINE_SDB);
     rgb_matrix_set_suspend_state(false);
-
     suspend_wakeup_init_user();
 }
 
@@ -70,8 +69,6 @@ void keyboard_post_init_kb() {
     keyboard_post_init_user();
 }
 
-#ifdef OLED_DRIVER_ENABLE
-
 bool command_extra(uint8_t code) {
     // jump to bootloader command
     switch (code) {
@@ -84,11 +81,7 @@ bool command_extra(uint8_t code) {
     return false;
 }
 
-#endif
-
 // clang-format off
-
-#ifdef RGB_MATRIX_ENABLE
 
 const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
 /* Refer to IS31 manual for these locations
@@ -176,7 +169,5 @@ led_config_t g_led_config = {
 		      1, 1, 1, 1, 1, 1
 	}
 };
-
-#endif
 
 // clang-format on

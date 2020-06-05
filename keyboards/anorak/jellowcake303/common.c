@@ -60,12 +60,8 @@ bool status_changed(kbd_status *news, kbd_status *olds) {
     return changed;
 }
 
-#ifdef OLED_DRIVER_ENABLE
-
 void jc_oled_show_bootloader_msg() {
     oled_set_cursor(0, 0);
     oled_write("bl\n\n\n\n", true);
     oled_render();
 }
-
-#endif

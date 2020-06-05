@@ -525,6 +525,7 @@ void rgb_matrix_decrease_speed(void) {
     eeconfig_update_rgb_matrix();
 }
 
+void    rgb_matrix_set_speed(uint8_t speed) { rgb_matrix_config.speed = speed; }
 uint8_t rgb_matrix_get_speed(void) { return rgb_matrix_config.speed; }
 
 led_flags_t rgb_matrix_get_flags(void) { return rgb_effect_params.flags; }

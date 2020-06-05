@@ -79,7 +79,7 @@ void virtser_task(void);
 void raw_hid_task(void);
 #endif
 
-#ifdef CONSOLE_ENABLE
+#if defined(CONSOLE_ENABLE) && !defined(CONSOLE_USE_UART_ENABLE)
 void console_task(void);
 #endif
 #ifdef MIDI_ENABLE
@@ -105,6 +105,57 @@ void midi_ep_task(void);
 //     chSysPolledDelayX(MS2RTC(STM32_HCLK, time));
 //   }
 // }
+
+//#define TESTING
+
+/* TESTING
+ * Amber LED blinker thread, times are in milliseconds.
+ */
+/* set this variable to non-zero anywhere to blink once */
+#ifdef TESTING
+uint8_t blinkLed = 0;
+static THD_WORKING_AREA(waBlinkOnceThread, 128);
+static THD_FUNCTION(blinkOnceThread, arg) {
+    (void)arg;
+    chRegSetThreadName("blinkGreen");
+    while (true) {
+        if (blinkLed) {
+            blinkLed = 0;
+            palClearLine(LINE_LED1);
+            chThdSleepMilliseconds(100);
+            palSetLine(LINE_LED1);
+        }
+        chThdSleepMilliseconds(100);
+    }
+}
+
+static THD_WORKING_AREA(waBlinkerThread, 128);
+static THD_FUNCTION(blinkerThread, arg) {
+    (void)arg;
+    chRegSetThreadName("blinker");
+    while (true) {
+        systime_t time = 750;
+        // time = USB_DRIVER.state == USB_ACTIVE ? 250 : 750;
+        if (USB_DRIVER.state != USB_ACTIVE) palClearLine(LINE_LED2);
+        // chSysPolledDelayX(MS2RTC(STM32_HCLK, time));
+        // streamWrite(&SD1, (const uint8_t *)"ti", 2);
+        chThdSleepMilliseconds(time);
+        palSetLine(LINE_LED2);
+        // chSysPolledDelayX(MS2RTC(STM32_HCLK, time));
+        // streamWrite(&SD1, (const uint8_t *)"to", 2);
+        chThdSleepMilliseconds(time);
+    }
+}
+#endif
+
+#ifdef CONSOLE_USE_UART_ENABLE
+#    include "chprintf.h"
+void init_console_uart_out_sd1(void) {
+    SerialConfig sdConfig = {115200};
+    sdStart(&SD1, &sdConfig);
+    chprintf((BaseSequentialStream *)&SD1, "qmk serial console");
+}
+#endif
 
 /* Early initialisation
  */
@@ -148,6 +199,16 @@ int main(void) {
 
 #ifdef STM32_EEPROM_ENABLE
     EEPROM_Init();
+#endif
+
+#ifdef CONSOLE_USE_UART_ENABLE
+    init_console_uart_out_sd1();
+#endif
+
+#ifdef TESTING
+    // TESTING
+    chThdCreateStatic(waBlinkerThread, sizeof(waBlinkerThread), NORMALPRIO, blinkerThread, NULL);
+    chThdCreateStatic(waBlinkOnceThread, sizeof(waBlinkOnceThread), NORMALPRIO, blinkOnceThread, NULL);
 #endif
 
     // TESTING
@@ -248,7 +309,7 @@ int main(void) {
 #endif
 
         keyboard_task();
-#ifdef CONSOLE_ENABLE
+#if defined(CONSOLE_ENABLE) && !defined(CONSOLE_USE_UART_ENABLE)
         console_task();
 #endif
 #ifdef MIDI_ENABLE

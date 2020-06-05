@@ -3,7 +3,7 @@
 # jellowcake keyboard driver 
 # MCU is a STM32F303CCT6
 #
-SRC += oled.c common.c control.c
+SRC += oled.c common.c control.c virtser.c jsonparser/jsmn.c
 #
 # the next two should match the directories in
 #  <chibios>/os/hal/ports/$(MCU_FAMILY)/$(MCU_SERIES)

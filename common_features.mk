@@ -521,3 +521,7 @@ ifeq ($(strip $(AUTO_SHIFT_ENABLE)), yes)
         OPT_DEFS += -DAUTO_SHIFT_MODIFIERS
     endif
 endif
+
+ifeq ($(strip $(CONSOLE_USE_UART_ENABLE)), yes)
+  OPT_DEFS += -DCONSOLE_USE_UART_ENABLE
+endif

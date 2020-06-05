@@ -15,7 +15,6 @@
  */
 
 #pragma once
-
 #include "quantum.h"
 
 // clang-format off

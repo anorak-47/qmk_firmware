@@ -763,7 +763,7 @@ void send_consumer(uint16_t data) {
  * ---------------------------------------------------------
  */
 
-#ifdef CONSOLE_ENABLE
+#if defined(CONSOLE_ENABLE) && !defined(CONSOLE_USE_UART_ENABLE)
 
 int8_t sendchar(uint8_t c) {
     // The previous implmentation had timeouts, but I think it's better to just slow down
@@ -798,7 +798,13 @@ int8_t sendchar(uint8_t c) {
 
 void sendchar_pf(void *p, char c) {
     (void)p;
+#ifdef CONSOLE_ENABLE
+#    ifdef CONSOLE_USE_UART_ENABLE
+    streamPut(&SD1, c);
+#    else
     sendchar((uint8_t)c);
+#    endif
+#endif
 }
 
 #ifdef RAW_ENABLE
